@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Poem + Background Music</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      height: 100vh;
+      color: white;
+      font-family: sans-serif;
+      overflow: hidden;
+    }
+
+    #gif-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+    }
+
+    #gif-container img {
+      max-width: 90%;
+      max-height: 80%;
+    }
+
+    #play-poem {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      padding: 12px 24px;
+      font-size: 18px;
+      background-color: #333;
+      color: white;
+      border: 2px solid #666;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #play-poem:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="gif-container">
+    <img src="imagenes/pure vessel.gif" alt="Looping GIF" />
+  </div>
+
+  <!-- Use simple filenames without spaces or special characters -->
+  <audio id="bg-music" loop>
+    <source src="musica/15 Pure Vessel (Hollow Knight_ Gods _ Nightmares)(M4A_128K).mp3" type="audio/mpeg">
+  </audio>
+
+  <audio id="poem-audio">
+    <source src="audio/READ OUT LOUD.mp3" type="audio/mpeg">
+  </audio>
+
+  <button id="play-poem">🔈 Play Poem</button>
+
+  <script>
+    const bgMusic = document.getElementById('bg-music');
+    const poemAudio = document.getElementById('poem-audio');
+    const playPoemBtn = document.getElementById('play-poem');
+
+    bgMusic.volume = 0.15;
+
+    // Start background music on first user interaction
+    const startAudio = () => {
+      bgMusic.play().catch(e => console.warn("Autoplay blocked:", e));
+      document.body.removeEventListener('click', startAudio);
+      document.body.removeEventListener('touchstart', startAudio);
+    };
+
+    document.body.addEventListener('click', startAudio);
+    document.body.addEventListener('touchstart', startAudio);
+
+    playPoemBtn.addEventListener('click', (e) => {
+      e.stopPropagation(); // Prevent triggering bg-music play again
+      poemAudio.currentTime = 0;
+      poemAudio.play().catch(e => console.error("Poem play failed:", e));
+    });
+  </script>
+
+</body>
+</html>
